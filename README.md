@@ -1,5 +1,7 @@
 # google-custom-search
 
+google-custom-search async 에러를 해결된 수정 코드입니다. 
+
 [![Downloads](https://pepy.tech/badge/google-custom-search)](https://pepy.tech/project/google-custom-search)
 [![Downloads](https://pepy.tech/badge/google-custom-search/month)](https://pepy.tech/project/google-custom-search)
 [![Downloads](https://pepy.tech/badge/google-custom-search/week)](https://pepy.tech/project/google-custom-search)

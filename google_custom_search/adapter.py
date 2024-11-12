@@ -88,13 +88,19 @@ class RequestsAdapter(BaseAdapter):
 
 class AiohttpAdapter(BaseAdapter):
     "This class is aiohttpadapter for async mode."
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not async_mode:
             raise AsyncError(
                 "This adapter use aiohttp, so please install aiohttp")
-        self.__session = ClientSession(*args, **kwargs)
+        self.__session = ClientSession() ## 수정1) ClientSession(*args, **kwargs) -> ClientSession()
+    
+    async def __aenter__(self):  ## 수정3) async def __aenter__(self) 추가 
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb): ## 수정4) async def __aexit__(self, exc_type, exc_val, exc_tb) 추가: 리소스 관리 개선
+        await self.__session.close() 
 
     async def request(self, method: str, path: str, *args, **kwargs) -> dict:
         async with self.__session.request(
@@ -106,4 +112,4 @@ class AiohttpAdapter(BaseAdapter):
         r = await self.request(
             "GET", "/", params=self._payload_maker(*args, **kwargs)
         )
-        return self._from_dict(await r.json())
+        return self._from_dict(r) ## 수정2) self._from_dict(await r.json) -> self._from_dict(r)
